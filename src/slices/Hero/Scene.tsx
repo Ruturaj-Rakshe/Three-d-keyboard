@@ -16,7 +16,8 @@ function CameraController() {
     const {camera, size} = useThree()
     const mouseRef = useRef({x:0.5, y:0.5});
     const targetRef = useRef(new THREE.Vector3(0,0,0));
-    
+    const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const baseCameraPosition = {
         x: 0, 
@@ -26,6 +27,16 @@ function CameraController() {
 
     useFrame(() => {
         const mouse = mouseRef.current;
+
+        if (prefersReducedMotion) {
+        camera.position.set(
+        baseCameraPosition.x,
+        baseCameraPosition.y,
+        baseCameraPosition.z,
+      );
+      camera.lookAt(targetRef.current);
+      return;
+    }
 
         const tiltX = (mouse.y - 0.5) * 0.2
         const tiltY = (mouse.x - 0.5) * 0.2
@@ -37,6 +48,8 @@ function CameraController() {
     })
 
     useEffect(() => {
+        if (prefersReducedMotion) return;
+
         const handleMouseMove = (event: MouseEvent) => {
             mouseRef.current.x = event.clientX / size.width;
             mouseRef.current.y = event.clientY / size.height;
@@ -71,6 +84,9 @@ export function Scene() {
     const scalingFactor = window.innerWidth <= 500 ? 0.5 : 1;
 
     useGSAP(() => {
+        const mm = gsap.matchMedia();
+
+         mm.add("(prefers-reduced-motion: no-preference)", () => {
         if (!keyboardRef.current) return;
 
         const keyboard = keyboardRef.current;
@@ -325,6 +341,7 @@ export function Scene() {
             });
           }
         })
+      })
     })
     return (
         <group>
