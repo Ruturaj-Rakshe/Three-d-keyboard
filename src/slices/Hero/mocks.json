@@ -1,0 +1,36 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"heading": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "heading1",
+						"content": {
+							"text": "Course"
+						}
+					}
+				]
+			},
+			"body": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Eu occaecat voluptate ut sint adipisicing eu irure voluptate laboris cupidatat est ipsum exercitation ad exercitation. Nisi voluptate dolore pariatur non commodo est laborum veniam dolor fugiat reprehenderit adipisicing amet. Non ex Lorem laboris sunt id ea fugiat anim amet nulla proident voluptate id officia."
+						}
+					}
+				]
+			},
+			"buy_button_text": {
+				"__TYPE__": "FieldContent",
+				"value": "indicate",
+				"type": "Text"
+			}
+		},
+		"items": []
+	}
+]
