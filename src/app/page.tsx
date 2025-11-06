@@ -5,10 +5,8 @@ import dynamic from "next/dynamic";
 
 import { createClient } from "@/prismicio";
 
-// Dynamically import the SliceZone with no SSR
-const ClientSliceZone = dynamic(() => import("./ClientSliceZone"), { 
-  ssr: false 
-});
+// Remove ssr: false from here
+const ClientSliceZone = dynamic(() => import("./ClientSliceZone"));
 
 export default async function Page() {
   const client = createClient();
