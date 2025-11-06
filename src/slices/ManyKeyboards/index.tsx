@@ -17,6 +17,10 @@ export type ManyKeyboardsProps =
 /**
  * Component for "ManyKeyboards" Slices.
  */
+const ClientCanvas = dynamic(
+  () => import("@react-three/fiber").then((mod) => mod.Canvas),
+  { ssr: false }
+);
 
 const KeyboardScene = dynamic(() => import("../ColorChanger/Scene"), { ssr: false });
 
@@ -63,9 +67,9 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
 
       </svg>
 
-      <Canvas camera={{ position: [0, 0.5, 0.5], fov: 45, zoom: 1.5 }} className="-mb-[10vh] grow">
+      <ClientCanvas camera={{ position: [0, 0.5, 0.5], fov: 45, zoom: 1.5 }} className="-mb-[10vh] grow">
         <KeyboardScene selectedTextureId={selectedTextureId} onAnimationComplete={handleAnimationComplete}/>
-      </Canvas>
+      </ClientCanvas>
       
       <Bounded className="relative shrink-0" innerClassName="gap-6 lg:gap-8 flex flex-col lg:flex-row">
         <div className="max-w-md shrink-0">

@@ -3,22 +3,27 @@ import { FC, useEffect, useState } from "react";
 import { Content, isFilled } from "@prismicio/client";
 import { PrismicRichText, PrismicText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
-import { Canvas } from "@react-three/fiber";
-import { Stage } from "@react-three/drei";
-import { SOUND_MAP, Switch } from "@/components/Switch";
+import dynamic from "next/dynamic";
+import { SOUND_MAP } from "@/components/Switch";
 import clsx from "clsx";
 import { FadeIn } from "@/components/FadeIn";
 import gsap from "gsap";
 
-/**
- * Props for `SwitchPlayground`.
- */
-export type SwitchPlaygroundProps =
-  SliceComponentProps<Content.SwitchPlaygroundSlice>;
+// Dynamically import Canvas and Stage
+const ClientCanvas = dynamic(
+  () => import("@react-three/fiber").then((mod) => mod.Canvas),
+  { ssr: false }
+);
 
-/**
- * Client-only wrapper
- */
+const ClientStage = dynamic(
+  () => import("@react-three/drei").then((mod) => mod.Stage),
+  { ssr: false }
+);
+
+const ClientSwitch = dynamic(() => import("@/components/Switch").then(mod => ({ default: mod.Switch })), { ssr: false });
+
+export type SwitchPlaygroundProps = SliceComponentProps<Content.SwitchPlaygroundSlice>;
+
 const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -28,9 +33,6 @@ const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
 };
 
-/**
- * Main Component
- */
 const SwitchPlayground: FC<SwitchPlaygroundProps> = ({ slice }) => {
   return (
     <Bounded>
@@ -62,9 +64,6 @@ const SwitchPlayground: FC<SwitchPlaygroundProps> = ({ slice }) => {
 
 export default SwitchPlayground;
 
-/**
- * SharedCanvas component (client-only)
- */
 type SharedCanvasProps = {
   switchDocument: Content.SwitchPlaygroundSliceDefaultPrimarySwitchesItem["switch"];
 };
@@ -100,19 +99,16 @@ const SharedCanvas = ({ switchDocument }: SharedCanvasProps) => {
 
   return (
     <div className="group relative min-h-96 overflow-hidden rounded-3xl select-none">
-      <Canvas camera={{ position: [1.5, 2, 0], fov: 7 }} className="h-96 w-full">
-        <Stage adjustCamera intensity={0.5} environment="city" shadows={"contact"}>
-          <ClientOnly>
-             <Switch
+      <ClientCanvas camera={{ position: [1.5, 2, 0], fov: 7 }} className="h-96 w-full">
+        <ClientStage adjustCamera intensity={0.5} environment="city" shadows={"contact"}>
+          <ClientSwitch
             onClick={handleSound}
             rotation={[0, Math.PI / 4, 0]}
             color={colorName}
             hexColor={hexColor || ""}
           />
-          </ClientOnly>
-         
-        </Stage>
-      </Canvas>
+        </ClientStage>
+      </ClientCanvas>
 
       <div
         className={clsx(
@@ -127,7 +123,7 @@ const SharedCanvas = ({ switchDocument }: SharedCanvasProps) => {
             textAnchor="middle"
             dominantBaseline="middle"
             fontSize={11}
-            className="font-black-slanted fill-white/30 uppercase mix-blend-overlay group-hover:fill-white motion-safe:transition-all motion-safe:duration-700"
+            className="font-black-slanted fill-white/30 uppercase mix-blend-overlay group-hover:fill-white/30 motion-safe:transition-all motion-safe:duration-700"
           >
             {Array.from({ length: 10 }, (_, i) => (
               <tspan key={i} x={`${(i + 1) * 10}%`} dy={i === 0 ? -40 : 14}>

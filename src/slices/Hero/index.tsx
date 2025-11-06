@@ -11,9 +11,13 @@ import { Mask } from "@react-three/drei";
 import gsap from "gsap";
 import dynamic from "next/dynamic";
 
-const SceneNoSSR = dynamic(() => import("./Scene"), { ssr: false })
 
+const ClientCanvas = dynamic(
+  () => import("@react-three/fiber").then((mod) => mod.Canvas),
+  { ssr: false }
+);
 
+const SceneNoSSR = dynamic(() => import("./Scene"), { ssr: false });
 /**
  * Props for `Hero`.
  */
@@ -71,9 +75,9 @@ const Hero: FC<HeroProps> = ({ slice }) => {
       className="h-dvh hero relative text-white text-shadow-black/30 text-shadow-lg motion-safe:h-[500vh]"
     >
       <div className="hero-scene sticky pointer-events-none top-0 h-dvh w-full">
-        <Canvas shadows="soft">
-          <Scene/>
-        </Canvas>
+        <ClientCanvas shadows="soft">
+          <SceneNoSSR/>
+        </ClientCanvas>
       </div>
 
       <div className="hero-content absolute inset-x-0 top-0 h-dvh">
