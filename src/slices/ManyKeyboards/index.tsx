@@ -17,6 +17,7 @@ export type ManyKeyboardsProps =
 /**
  * Component for "ManyKeyboards" Slices.
  */
+
 const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
