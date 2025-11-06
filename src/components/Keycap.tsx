@@ -1,3 +1,4 @@
+"use client"
 import * as THREE from "three";
 import { Float, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";

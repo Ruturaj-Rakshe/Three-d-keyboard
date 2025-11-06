@@ -1,3 +1,4 @@
+"use client"
 import * as THREE from "three";
 import React, { useRef, forwardRef, useImperativeHandle } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
