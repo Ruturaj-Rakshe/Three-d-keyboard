@@ -66,7 +66,7 @@ function CameraController() {
 
 }
 
-export function Scene() {
+const Scene = () => {
     const keyboardRef = useRef<THREE.Group>(null);
     const keyboardAnimationRef = useRef<KeyboardRefs>(null);
     const keycapRef = useRef<THREE.Group>(null);
@@ -81,15 +81,16 @@ export function Scene() {
         rotationZ: 0.02,
     }
 
-    const scalingFactor = window.innerWidth <= 500 ? 0.5 : 1;
+    const scalingFactor = typeof window !== "undefined" && window.innerWidth <= 500 ? 0.5 : 1;
+
 
     useGSAP(() => {
         const mm = gsap.matchMedia();
-
-         mm.add("(prefers-reduced-motion: no-preference)", () => {
         if (!keyboardRef.current) return;
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
 
-        const keyboard = keyboardRef.current;
+            const keyboard = keyboardRef.current;
+            if(!keyboard) return;
 
         gsap.to({
         lightIntensityScaler: 0 //This is that one object the onUpdate function will refer to, to make changes.
@@ -371,3 +372,5 @@ export function Scene() {
         </group>
     )
 }
+
+export default Scene;

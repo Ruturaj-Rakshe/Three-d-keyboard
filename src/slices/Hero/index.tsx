@@ -1,16 +1,18 @@
 "use client"; 
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
 import { Canvas } from "@react-three/fiber";
-import { Scene } from "./Scene";
+import  Scene  from "./Scene";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger, SplitText } from "gsap/all";
 import { Mask } from "@react-three/drei";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 
-gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
+const SceneNoSSR = dynamic(() => import("./Scene"), { ssr: false })
+
 
 /**
  * Props for `Hero`.
@@ -22,7 +24,8 @@ export type HeroProps = SliceComponentProps<Content.HeroSlice>;
  */
 const Hero: FC<HeroProps> = ({ slice }) => {
 
-  useGSAP(() => {
+  useEffect(() => {
+    gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
     const split = SplitText.create(".hero-heading", {type: "lines, words, chars",
       mask: "lines",
       linesClass: "line++"
