@@ -14,7 +14,7 @@ type SceneProps = {
     onAnimationComplete: () => void;
 }
 
-export function Scene({ selectedTextureId, onAnimationComplete }: SceneProps) {
+const Scene = ({ selectedTextureId, onAnimationComplete }: SceneProps) => {
     const keyboardRef = useRef<THREE.Group>(null);
     const texturePaths = KEYCAP_TEXTURES.map((texture) => texture.path);
     const textures = useTexture(texturePaths);
@@ -64,3 +64,5 @@ export function Scene({ selectedTextureId, onAnimationComplete }: SceneProps) {
         </Stage>// why not in keyboard the ref was set    
 );
 }
+
+export default Scene;

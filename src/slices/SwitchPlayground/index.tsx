@@ -102,12 +102,15 @@ const SharedCanvas = ({ switchDocument }: SharedCanvasProps) => {
     <div className="group relative min-h-96 overflow-hidden rounded-3xl select-none">
       <Canvas camera={{ position: [1.5, 2, 0], fov: 7 }} className="h-96 w-full">
         <Stage adjustCamera intensity={0.5} environment="city" shadows={"contact"}>
-          <Switch
+          <ClientOnly>
+             <Switch
             onClick={handleSound}
             rotation={[0, Math.PI / 4, 0]}
             color={colorName}
             hexColor={hexColor || ""}
           />
+          </ClientOnly>
+         
         </Stage>
       </Canvas>
 

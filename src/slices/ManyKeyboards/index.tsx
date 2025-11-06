@@ -7,7 +7,7 @@ import { KEYCAP_TEXTURES } from "../ColorChanger";
 import clsx from "clsx";
 import Image from "next/image";
 import { Canvas } from "@react-three/fiber";
-import { Scene } from "../ColorChanger/Scene";
+import dynamic from "next/dynamic";
 /* 
  * Props for `ManyKeyboards`.
  */
@@ -18,14 +18,7 @@ export type ManyKeyboardsProps =
  * Component for "ManyKeyboards" Slices.
  */
 
-const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) return null;
-  return <>{children}</>;
-};
+const KeyboardScene = dynamic(() => import("../ColorChanger/Scene"), { ssr: false });
 
 type KeycapTexture = (typeof KEYCAP_TEXTURES)[number]
 const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
@@ -71,7 +64,7 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
       </svg>
 
       <Canvas camera={{ position: [0, 0.5, 0.5], fov: 45, zoom: 1.5 }} className="-mb-[10vh] grow">
-        <Scene selectedTextureId={selectedTextureId} onAnimationComplete={handleAnimationComplete}/>
+        <KeyboardScene selectedTextureId={selectedTextureId} onAnimationComplete={handleAnimationComplete}/>
       </Canvas>
       
       <Bounded className="relative shrink-0" innerClassName="gap-6 lg:gap-8 flex flex-col lg:flex-row">
