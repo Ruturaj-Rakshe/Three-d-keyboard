@@ -1,5 +1,5 @@
 "use client";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, PrismicText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
@@ -17,6 +17,14 @@ export type ManyKeyboardsProps =
 /**
  * Component for "ManyKeyboards" Slices.
  */
+const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!isClient) return null;
+  return <>{children}</>;
+};
 
 type KeycapTexture = (typeof KEYCAP_TEXTURES)[number]
 const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {

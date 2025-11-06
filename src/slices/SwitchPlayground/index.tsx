@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Content, isFilled } from "@prismicio/client";
 import { PrismicRichText, PrismicText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
@@ -9,6 +9,7 @@ import { SOUND_MAP, Switch } from "@/components/Switch";
 import clsx from "clsx";
 import { FadeIn } from "@/components/FadeIn";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 /**
  * Props for `SwitchPlayground`.
  */
@@ -18,6 +19,16 @@ export type SwitchPlaygroundProps =
 /**
  * Component for "SwitchPlayground" Slices.
  */
+
+const ClientOnly: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!isClient) return null;
+  return <>{children}</>;
+};
+
 const SwitchPlayground: FC<SwitchPlaygroundProps> = ({ slice }) => {
   return (
     <Bounded>
