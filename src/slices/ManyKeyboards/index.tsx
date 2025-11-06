@@ -1,30 +1,20 @@
 "use client";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, PrismicText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
 import { KEYCAP_TEXTURES } from "../ColorChanger";
 import clsx from "clsx";
 import Image from "next/image";
-import { Canvas } from "@react-three/fiber";
 import dynamic from "next/dynamic";
-/* 
- * Props for `ManyKeyboards`.
- */
-export type ManyKeyboardsProps =
-  SliceComponentProps<Content.ManyKeyboardsSlice>;
 
-/**
- * Component for "ManyKeyboards" Slices.
- */
-const ClientCanvas = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.Canvas),
-  { ssr: false }
-);
-
+const ClientCanvas = dynamic(() => import("../../components/clientCanvas"), { ssr: false });
 const KeyboardScene = dynamic(() => import("../ColorChanger/Scene"), { ssr: false });
 
-type KeycapTexture = (typeof KEYCAP_TEXTURES)[number]
+export type ManyKeyboardsProps = SliceComponentProps<Content.ManyKeyboardsSlice>;
+
+type KeycapTexture = (typeof KEYCAP_TEXTURES)[number];
+
 const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
   const [selectedTextureId, setSelectedTextureId] = useState(KEYCAP_TEXTURES[0].id);
   const [backgroundText, setBackgroundText] = useState(KEYCAP_TEXTURES[0].name);
@@ -64,7 +54,6 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
             </tspan>
           ))}
         </text>
-
       </svg>
 
       <ClientCanvas camera={{ position: [0, 0.5, 0.5], fov: 45, zoom: 1.5 }} className="-mb-[10vh] grow">
@@ -75,7 +64,6 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
         <div className="max-w-md shrink-0">
           <h2 className="font-bold-slanted mb-1 text-4xl uppercase lg:mb-2 lg:text-6xl">
             <PrismicText field={slice.primary.heading} />
-
           </h2>
           <div className="text-pretty lg:text-lg">
             <PrismicRichText field={slice.primary.description} />
@@ -85,11 +73,9 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
           {KEYCAP_TEXTURES.map((texture) => (
             <li key={texture.id}>
               <button onClick={() => handleTextureSelect(texture)} disabled={isAnimating} className={clsx("cursor-pointer flex aspect-square flex-col items-center justify-center rounded-2xl p-4 border-10 hover:scale-105 motion-safe:transition-all motion-safe:duration-300",
-                
                 selectedTextureId === texture.id ? "bg-[#81BFED] border-[#81BFED]/20" : "cursor-pointer border-gray-300 hover:border-gray-500",
                 isAnimating && "cursor-not-allowed opacity-50"
               )}> 
-
                 <div className="mb-3 overflow-hidden rounded border-2 border-black bg-gray-100">
                   <Image
                     src={texture.path}
@@ -105,10 +91,8 @@ const ManyKeyboards: FC<ManyKeyboardsProps> = ({ slice }) => {
               </button>
             </li>
           ))}
-
         </ul>
       </Bounded>
-      
     </section>
   );
 };

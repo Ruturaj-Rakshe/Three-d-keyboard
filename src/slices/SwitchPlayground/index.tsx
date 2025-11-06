@@ -3,24 +3,13 @@ import { FC, useEffect, useState } from "react";
 import { Content, isFilled } from "@prismicio/client";
 import { PrismicRichText, PrismicText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
-import dynamic from "next/dynamic";
 import { SOUND_MAP } from "@/components/Switch";
 import clsx from "clsx";
 import { FadeIn } from "@/components/FadeIn";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 
-// Dynamically import Canvas and Stage
-const ClientCanvas = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.Canvas),
-  { ssr: false }
-);
-
-const ClientStage = dynamic(
-  () => import("@react-three/drei").then((mod) => mod.Stage),
-  { ssr: false }
-);
-
-const ClientSwitch = dynamic(() => import("@/components/Switch").then(mod => ({ default: mod.Switch })), { ssr: false });
+const SwitchCanvas = dynamic(() => import("@/components/SwitchCanvas"), { ssr: false });
 
 export type SwitchPlaygroundProps = SliceComponentProps<Content.SwitchPlaygroundSlice>;
 
@@ -99,16 +88,7 @@ const SharedCanvas = ({ switchDocument }: SharedCanvasProps) => {
 
   return (
     <div className="group relative min-h-96 overflow-hidden rounded-3xl select-none">
-      <ClientCanvas camera={{ position: [1.5, 2, 0], fov: 7 }} className="h-96 w-full">
-        <ClientStage adjustCamera intensity={0.5} environment="city" shadows={"contact"}>
-          <ClientSwitch
-            onClick={handleSound}
-            rotation={[0, Math.PI / 4, 0]}
-            color={colorName}
-            hexColor={hexColor || ""}
-          />
-        </ClientStage>
-      </ClientCanvas>
+      <SwitchCanvas colorName={colorName} hexColor={hexColor} onSoundPlay={handleSound} />
 
       <div
         className={clsx(

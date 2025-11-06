@@ -3,39 +3,26 @@ import { FC, useEffect } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
-import { Canvas } from "@react-three/fiber";
-import  Scene  from "./Scene";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger, SplitText } from "gsap/all";
-import { Mask } from "@react-three/drei";
 import gsap from "gsap";
 import dynamic from "next/dynamic";
 
+const ClientCanvas = dynamic(() => import("../../components/clientCanvas"), { ssr: false });
+const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
-const ClientCanvas = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.Canvas),
-  { ssr: false }
-);
-
-const SceneNoSSR = dynamic(() => import("./Scene"), { ssr: false });
-/**
- * Props for `Hero`.
- */
 export type HeroProps = SliceComponentProps<Content.HeroSlice>;
 
-/**
- * Component for "Hero" Slices.
- */
 const Hero: FC<HeroProps> = ({ slice }) => {
-
   useEffect(() => {
-    gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
-    const split = SplitText.create(".hero-heading", {type: "lines, words, chars",
+    gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
+    const split = SplitText.create(".hero-heading", {
+      type: "lines, words, chars",
       mask: "lines",
       linesClass: "line++"
     });
 
-    const tl = gsap.timeline({delay: 4.2})
+    const tl = gsap.timeline({delay: 4.2});
 
     tl.from(split.chars, {
       opacity:0,
@@ -47,7 +34,7 @@ const Hero: FC<HeroProps> = ({ slice }) => {
       opacity:1,
       ease: "power2.out",
       duration: 0.6,
-    })
+    });
 
     gsap.fromTo(".hero-scene", {
       background: "linear-gradient(to bottom, #000000, #0f172a, #062f4a, #7fa0b9)"
@@ -59,14 +46,8 @@ const Hero: FC<HeroProps> = ({ slice }) => {
         end: "50% bottom",
         scrub: 1,
       }
-
-    })
-
-
-  }, [])
-
-
-
+    });
+  }, []);
 
   return (
     <section
@@ -76,7 +57,7 @@ const Hero: FC<HeroProps> = ({ slice }) => {
     >
       <div className="hero-scene sticky pointer-events-none top-0 h-dvh w-full">
         <ClientCanvas shadows="soft">
-          <SceneNoSSR/>
+          <Scene/>
         </ClientCanvas>
       </div>
 
@@ -109,9 +90,6 @@ const Hero: FC<HeroProps> = ({ slice }) => {
           </button>
         </Bounded>
       </div>
-
-
-
     </section>
   );
 };
